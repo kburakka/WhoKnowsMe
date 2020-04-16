@@ -1,0 +1,8 @@
+{
+    "join" : "JOIN",
+    "create" : "CREATE",
+    "questions" : "QUESTIONS",
+    "share" : "SHARE",
+    "yes" : "Yes",
+    "no" : "No"
+}
