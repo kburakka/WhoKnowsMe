@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/AppLocalizations.dart';
 import 'package:my_app/BlocLocalization.dart';
+import 'package:my_app/core/DeviceInfo.dart';
+import 'package:my_app/core/model/User.dart';
+import 'package:my_app/core/service/firebase_service.dart';
 import 'package:my_app/extension/hex_color.dart';
 import 'package:my_app/ui/shared/fab.dart';
 import 'package:my_app/ui/shared/icon_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key}) : super(key: key);
@@ -21,17 +25,58 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  FirebaseService service;
+  static const String PREFS_KEY = "firebaseKey";
+
+  @override
+  void initState() {
+    super.initState();
+    service = FirebaseService();
+    isUserExist();
+    service.getUsers();
+  }
+
+  Future<void> saveKey(String key) async {
+    SharedPreferences.getInstance().then((prefs) {
+           prefs.setString(PREFS_KEY, key);
+    });
+  }
+
+  Future<String> getFirebaseKey() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(PREFS_KEY) ?? "";
+  }
+
+  Future<void> isUserExist() async {
+    final key = await getFirebaseKey();
+    if (key == "") {
+       myDeviceInfo();
+    }else{
+      final user = await service.getUser(key);
+      if (!(user)){
+        myDeviceInfo();
+      }
+    }
+  }
+
+  Future<void> myDeviceInfo() async {
+    final deveviceInfo = await DeviceInfo.getDeviceDetails();
+    User user = new User();
+    user.name = deveviceInfo[0];
+    user.deviceId = deveviceInfo[2];
+
+    final key = await service.postUser(user);
+    if (!(key == "fail")){
+    saveKey(key);
+    }
+  }
+
   String joinString = "";
   String createString = "";
 
-  // @override
-  // void initState() { 
-  //   super.initState();
-  //   AppLocalizations(Locale('tr'),_refresh);
-  // }
   @override
   Widget build(BuildContext context) {
-    AppLocalizations.of(context,_refresh);
+    AppLocalizations.of(context, _refresh);
     return Scaffold(
         body: Center(
             child: Container(
