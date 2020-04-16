@@ -60,8 +60,7 @@ class _TestViewState extends State<TestView> {
                       child: new FlatButton.icon(
                         color: Colors.white38,
                         icon: Icon(Icons.share),
-                        label: Text(AppLocalizations.getString(
-                            'share')), 
+                        label: Text(AppLocalizations.getString('share')), 
                         onPressed: () {
                           //Code to execute when Floating Action Button is clicked
                           //...

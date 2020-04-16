@@ -5,14 +5,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LangUtils {
   static const String PREFS_LANGUAGE = "lang";
 
-  static void saveLanguage(Locale locale) {
-    AppLocalizations.updateLocale(locale);
+  static Future<void> saveLanguage(Locale locale) async{
+    await AppLocalizations.updateLocale(locale);
     SharedPreferences.getInstance().then((prefs) {
       String curLang = prefs.getString(PREFS_LANGUAGE) ?? "";
       if (curLang != locale.languageCode)
         prefs.setString(PREFS_LANGUAGE, locale.languageCode);
     });
-       
+    
   }
   static Future<String> getLanguageCode() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/LangUtils.dart';
 
 class FancyFab extends StatefulWidget {
   final Function() onPressed;
   final String tooltip;
   final IconData icon;
+  final Function() notifyParent;
 
-  FancyFab({this.onPressed, this.tooltip, this.icon});
+  FancyFab({this.onPressed, this.tooltip, this.icon, this.notifyParent});
 
   @override
   _FancyFabState createState() => _FancyFabState();
@@ -70,21 +72,16 @@ class _FancyFabState extends State<FancyFab>
     isOpened = !isOpened;
   }
 
-  Widget add() {
+  Widget flagTr() {    
     return Container(
       child: FloatingActionButton(
-        onPressed: null,
-        tooltip: 'Add',
-        child: Icon(Icons.add),
-      ),
-    );
-  }
-
-  Widget image() {
-    return Container(
-      child: FloatingActionButton(
-        onPressed: null,
-        tooltip: 'Image',
+        backgroundColor: Colors.transparent,
+        heroTag: 2,
+        onPressed: () async { 
+           await LangUtils.saveLanguage(Locale("tr"));
+           widget.notifyParent();
+       },
+        tooltip: 'Türkçe',
         child: new Image(
                image: new AssetImage("assets/images/flagTr.png"),
                width: 30,
@@ -93,12 +90,18 @@ class _FancyFabState extends State<FancyFab>
       ),
     );
   }
+Locale locale = new Locale("tr");
 
-  Widget inbox() {
+  Widget flagEng() {
     return Container(
       child: FloatingActionButton(
-        onPressed: null,
-        tooltip: 'Inbox',
+        backgroundColor: Colors.transparent,
+        heroTag: 1,
+        onPressed: () async { 
+          await LangUtils.saveLanguage(Locale("en"));
+          widget.notifyParent();
+        },
+        tooltip: 'English',
         child: new Image(
                image: new AssetImage("assets/images/flagEng.png"),
                width: 30,
@@ -111,6 +114,7 @@ class _FancyFabState extends State<FancyFab>
   Widget toggle() {
     return Container(
       child: FloatingActionButton(
+        heroTag: 0,
         backgroundColor: _buttonColor.value,
         onPressed: animate,
         tooltip: 'Toggle',
@@ -130,18 +134,10 @@ class _FancyFabState extends State<FancyFab>
         Transform(
           transform: Matrix4.translationValues(
             0.0,
-            _translateButton.value * 3.0,
-            0.0,
-          ),
-          child: add(),
-        ),
-        Transform(
-          transform: Matrix4.translationValues(
-            0.0,
             _translateButton.value * 2.0,
             0.0,
           ),
-          child: image(),
+          child: flagTr(),
         ),
         Transform(
           transform: Matrix4.translationValues(
@@ -149,7 +145,7 @@ class _FancyFabState extends State<FancyFab>
             _translateButton.value,
             0.0,
           ),
-          child: inbox(),
+          child: flagEng(),
         ),
         toggle(),
       ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/AppLocalizations.dart';
-import 'package:my_app/core/Constans.dart';
 import 'package:my_app/core/model/Question.dart';
+import 'package:my_app/ui/shared/question_text.dart';
 
 class CardView extends StatefulWidget {
   final Qustion question;
@@ -22,7 +22,7 @@ class _CardViewState extends State<CardView> {
     return Card(
         elevation: 20,
         child: ListTile(
-            title: Text( Constants.languageCode == "tr" ? this.widget.question.turkce : this.widget.question.ingilizce),
+            title: QuestionText(question: widget.question),
             subtitle: ButtonBar(
               alignment: MainAxisAlignment.center,
               children: <Widget>[
