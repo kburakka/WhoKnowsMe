@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/AppLocalizations.dart';
 import 'package:my_app/BlocLocalization.dart';
 import 'package:my_app/core/DeviceInfo.dart';
+import 'package:my_app/core/SharedPref.dart';
 import 'package:my_app/core/model/User.dart';
 import 'package:my_app/core/service/firebase_service.dart';
 import 'package:my_app/extension/hex_color.dart';
 import 'package:my_app/ui/shared/fab.dart';
 import 'package:my_app/ui/shared/icon_button.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key}) : super(key: key);
@@ -26,7 +26,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   FirebaseService service;
-  static const String PREFS_KEY = "firebaseKey";
 
   @override
   void initState() {
@@ -36,19 +35,8 @@ class _MyHomePageState extends State<MyHomePage> {
     service.getUsers();
   }
 
-  Future<void> saveKey(String key) async {
-    SharedPreferences.getInstance().then((prefs) {
-           prefs.setString(PREFS_KEY, key);
-    });
-  }
-
-  Future<String> getFirebaseKey() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(PREFS_KEY) ?? "";
-  }
-
   Future<void> isUserExist() async {
-    final key = await getFirebaseKey();
+    final key = await SharedPref.getFirebaseKey();
     if (key == "") {
        myDeviceInfo();
     }else{
@@ -67,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final key = await service.postUser(user);
     if (!(key == "fail")){
-    saveKey(key);
+    SharedPref.saveKey(key);
     }
   }
 

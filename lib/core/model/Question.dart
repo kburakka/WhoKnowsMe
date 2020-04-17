@@ -1,14 +1,18 @@
-class Qustion {
+import 'package:my_app/core/model/base_model.dart';
+
+class Question extends BaseModel{
   String ingilizce;
   String turkce;
   int state;
+  String key;
 
-  Qustion({this.ingilizce, this.turkce, this.state});
+  Question({this.ingilizce, this.turkce, this.state});
 
-  Qustion.fromJson(Map<String, dynamic> json) {
+  Question.fromJson(Map<String, dynamic> json) {
     ingilizce = json['ingilizce'];
     turkce = json['turkce'];
     state = -1;
+    key = json['key'];
   }
 
   Map<String, dynamic> toJson() {
@@ -16,6 +20,12 @@ class Qustion {
     data['ingilizce'] = this.ingilizce;
     data['turkce'] = this.turkce;
     data['state'] = this.state;
+    data['key'] = this.key;
     return data;
+  }
+
+  @override
+  fromJson(Map<String, dynamic> json) {
+    return Question.fromJson(json);
   }
 }

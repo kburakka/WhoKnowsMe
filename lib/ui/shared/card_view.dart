@@ -3,8 +3,10 @@ import 'package:my_app/AppLocalizations.dart';
 import 'package:my_app/core/model/Question.dart';
 import 'package:my_app/ui/shared/question_text.dart';
 
+
+
 class CardView extends StatefulWidget {
-  final Qustion question;
+  final Question question;
 
   const CardView({Key key, this.question}) : super(key: key);
 
@@ -13,10 +15,6 @@ class CardView extends StatefulWidget {
 }
 
 class _CardViewState extends State<CardView> {
-  int selectedIndex = 0;
-  int selectedState = -1;
-  List<int> states = [];
-
   @override
   Widget build(BuildContext context) {
     return Card(

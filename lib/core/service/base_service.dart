@@ -17,7 +17,7 @@ class BaseService {
       {Header header}) async {
     // final response = await http.get("$FIREBASE_URL/$child.json?${header.key}=${header.value}");
     final response = await http.get("$FIREBASE_URL/$child.json");
-
+    print("$FIREBASE_URL/$child.json");
     switch (response.statusCode) {
       case HttpStatus.ok:
         final jsonModel = json.decode(response.body);

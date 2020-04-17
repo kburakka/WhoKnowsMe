@@ -3,7 +3,7 @@ import 'package:my_app/core/Constans.dart';
 import 'package:my_app/core/model/Question.dart';
 
 class QuestionText extends StatelessWidget {
-  final Qustion question;
+  final Question question;
 
   QuestionText({this.question});
 
