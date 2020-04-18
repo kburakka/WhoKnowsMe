@@ -4,5 +4,8 @@
     "questions" : "SORULAR",
     "share" : "PAYLAŞ",
     "yes" : "Evet",
-    "no" : "Hayır"
+    "no" : "Hayır",
+    "id" : "Oyun No",
+    "enter" : "GİRİŞ",
+    "send":"GÖNDER"
 }

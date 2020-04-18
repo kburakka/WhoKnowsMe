@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/AppLocalizations.dart';
@@ -16,7 +17,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   void onPress() {}
   void _refresh() {
     setState(() {
@@ -26,6 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   FirebaseService service;
+  // Timer _timerLink;
 
   @override
   void initState() {
@@ -38,10 +40,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> isUserExist() async {
     final key = await SharedPref.getFirebaseKey();
     if (key == "") {
-       myDeviceInfo();
-    }else{
+      myDeviceInfo();
+    } else {
       final user = await service.getUser(key);
-      if (!(user)){
+      if (!(user)) {
         myDeviceInfo();
       }
     }
@@ -54,8 +56,8 @@ class _MyHomePageState extends State<MyHomePage> {
     user.deviceId = deveviceInfo[2];
 
     final key = await service.postUser(user);
-    if (!(key == "fail")){
-    SharedPref.saveKey(key);
+    if (!(key == "fail")) {
+      SharedPref.saveKey(key);
     }
   }
 
@@ -82,11 +84,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 HomeIconButton(
                   imageName: 'joinTest',
                   title: joinString,
+                  type: "join",
                 ),
                 HomeIconButton(
                   imageName: 'createTest',
                   title: createString,
-                )
+                  type: "create",
+                ),
               ]),
             ),
           ),

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "215320315148",
+    "firebase_url": "https://whoknowsme-8e365.firebaseio.com",
+    "project_id": "whoknowsme-8e365",
+    "storage_bucket": "whoknowsme-8e365.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:215320315148:android:c97904a71ecc3f53727529",
+        "android_client_info": {
+          "package_name": "com.example.my_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "215320315148-46711g4437g3qlk6h1pn5tn2lvoba83n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDh929JbtYr5LpoJVPHaldMBmIe1rLeKnk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "215320315148-46711g4437g3qlk6h1pn5tn2lvoba83n.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "215320315148-oi827jcct269utpdf8l1tbi54rmalmlc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.myApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

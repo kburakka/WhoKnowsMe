@@ -4,5 +4,8 @@
     "questions" : "QUESTIONS",
     "share" : "SHARE",
     "yes" : "Yes",
-    "no" : "No"
+    "no" : "No",
+    "id" : "Game No",
+    "enter" : "ENTER",
+    "send" : "SEND"
 }

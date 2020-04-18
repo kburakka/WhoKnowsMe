@@ -11,7 +11,11 @@ class Question extends BaseModel{
   Question.fromJson(Map<String, dynamic> json) {
     ingilizce = json['ingilizce'];
     turkce = json['turkce'];
+    if (json['state'] == null){
     state = -1;
+    }else{
+      state =json['state'];
+    }
     key = json['key'];
   }
 
