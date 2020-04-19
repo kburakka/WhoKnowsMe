@@ -25,14 +25,15 @@ class _JoinTestState extends State<JoinTest> {
                     padding: const EdgeInsets.all(30),
                     child: new TextField(
                       style: new TextStyle(color: Colors.white),
+                      
                       decoration: InputDecoration(
+                        labelStyle: new TextStyle(color: Colors.white),
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.white)),
                         enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.white)),
                         labelText: AppLocalizations.getString('id'),
                       ),
-
                       cursorColor: Colors.white,
                     )),
                 Padding(

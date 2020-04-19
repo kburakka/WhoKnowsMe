@@ -61,17 +61,17 @@ class FirebaseService {
     }
   }
 
-    Future postResult(Result request) async {
+    Future<bool> postResult(Result request) async {
     var jsonModel = json.encode(request.toJson());
     final response =
         await http.post("$FIREBASE_URL/results.json", body: jsonModel);
 
     switch (response.statusCode) {
       case HttpStatus.ok:
-        final jsonModel = json.decode(response.body);
-        return jsonModel["score"];
+        // final jsonModel = json.decode(response.body);
+        return true;
       default:
-        return "fail";
+        return false;
     }
   }
 

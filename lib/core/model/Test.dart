@@ -4,13 +4,15 @@ import 'package:my_app/core/model/base_model.dart';
 class Test extends BaseModel{
   String date;
   String owner;
+  String id;
   List<Question> questions;
 
-  Test({this.date, this.owner, this.questions});
+  Test({this.id,this.date, this.owner, this.questions});
 
   Test.fromJson(Map<String, dynamic> json) {
     date = json['date'];
     owner = json['owner'];
+    id = json['id'];
     if (json['questions'] != null) {
       questions = new List<Question>();
       json['questions'].forEach((v) {
@@ -23,6 +25,7 @@ class Test extends BaseModel{
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['date'] = this.date;
     data['owner'] = this.owner;
+    data['id'] = this.id;
     if (this.questions != null) {
       data['questions'] = this.questions.map((v) => v.toJson()).toList();
     }

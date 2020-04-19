@@ -49,7 +49,7 @@ class _TestViewState extends State<TestView> {
                 child: Column(children: [
                   Expanded(child: _buildList()),
                   Padding(
-                      padding: const EdgeInsets.all(30), child: _finalButon())
+                      padding: const EdgeInsets.only(left:0,top:10,right:0,bottom:30), child: _finalButon())
                 ]))));
   }
 
@@ -73,9 +73,9 @@ class _TestViewState extends State<TestView> {
         },
       );
     } else {
-      Future<List<Question>> questions = service.getQuestions();
+      Future<List<Question>> questionFuture = service.getQuestions();
       return FutureBuilder(
-        future: questions,
+        future: questionFuture,
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
@@ -103,7 +103,7 @@ class _TestViewState extends State<TestView> {
         onPressed: () async {
           now = DateTime.now();
           Result result = new Result();
-          result.date = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
+          result.date = DateFormat('yyyy-MM-dd HH:mm:ss. SSS').format(now);
           result.fillerId = await SharedPref.getFirebaseKey();
           result.testId = "-M5CrUk1fAR6aOW7L3SV";
           int point = 0;
@@ -116,7 +116,8 @@ class _TestViewState extends State<TestView> {
             }
           }
           result.score = point;
-          service.postResult(result);
+          await service.postResult(result);
+          _neverSatisfied(point);
         },
       );
     } else {
@@ -127,14 +128,45 @@ class _TestViewState extends State<TestView> {
         onPressed: () async {
           now = DateTime.now();
           Test test = new Test();
-          test.date = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
+          test.date = DateFormat('yyyy-MM-dd HH:mmssSSS').format(now);
           test.questions = questions;
           test.owner = await SharedPref.getFirebaseKey();
+        
+          test.id = test.owner.substring(test.owner.length-1) + test.date.split(":")[1];
+
           service.postTest(test);
         },
       );
     }
   }
+
+  Future<void> _neverSatisfied(int point) async {
+  String text = AppLocalizations.getString('point') + "$point.";
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(AppLocalizations.getString('congratulations')),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Text(text),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          FlatButton(
+            child: Text(AppLocalizations.getString('ok')),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
 
   Widget _listViewForJoin(Test test) {
     questions = test.questions;
