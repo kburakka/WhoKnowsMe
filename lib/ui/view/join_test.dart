@@ -11,6 +11,8 @@ class JoinTest extends StatefulWidget {
 }
 
 class _JoinTestState extends State<JoinTest> {
+  TextEditingController roomIdController = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,8 +26,8 @@ class _JoinTestState extends State<JoinTest> {
                 Padding(
                     padding: const EdgeInsets.all(30),
                     child: new TextField(
+                      controller: roomIdController,
                       style: new TextStyle(color: Colors.white),
-                      
                       decoration: InputDecoration(
                         labelStyle: new TextStyle(color: Colors.white),
                         focusedBorder: OutlineInputBorder(
@@ -45,7 +47,7 @@ class _JoinTestState extends State<JoinTest> {
                       onPressed: () async {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => TestView(fromJoin: true,),
-                          settings: RouteSettings(arguments: "id")));
+                          settings: RouteSettings(arguments: roomIdController.text)));
                       },
                     ))
               ]),

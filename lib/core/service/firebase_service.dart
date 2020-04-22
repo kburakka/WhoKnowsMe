@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:my_app/core/model/FilterTest.dart';
 import 'package:my_app/core/model/Question.dart';
 import 'package:my_app/core/model/Result.dart';
 import 'package:my_app/core/model/Test.dart';
@@ -26,12 +27,12 @@ class FirebaseService {
 
 
   Future<Test> getTest(String id) async {
-    final response = await http.get("$FIREBASE_URL/tests/$id.json");
+    final response = await http.get("$FIREBASE_URL/tests.json?orderBy=%22id%22&equalTo=%22$id%22");
     switch (response.statusCode) {
       case HttpStatus.ok:
         final jsonModel = json.decode(response.body) as Map;
         if (jsonModel == null) throw NullThrownError();
-        return Test.fromJson(jsonModel);
+        return FilterTest.fromJson(jsonModel).test;
       default:
         return Future.error(response.statusCode);
     }

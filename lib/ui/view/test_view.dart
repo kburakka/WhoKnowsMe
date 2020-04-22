@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 
 class TestView extends StatefulWidget {
   final bool fromJoin;
+
   const TestView({Key key, this.fromJoin}) : super(key: key);
 
   @override
@@ -32,6 +33,8 @@ class _TestViewState extends State<TestView> {
 
   @override
   Widget build(BuildContext context) {
+    final String id = ModalRoute.of(context).settings.arguments;
+    
     return Scaffold(
         appBar: AppBar(
             backgroundColor: HexColor.fromHex('484693'),
@@ -47,15 +50,15 @@ class _TestViewState extends State<TestView> {
                       HexColor.fromHex('559596')
                     ])),
                 child: Column(children: [
-                  Expanded(child: _buildList()),
+                  Expanded(child: _buildList(id)),
                   Padding(
                       padding: const EdgeInsets.only(left:0,top:10,right:0,bottom:30), child: _finalButon())
                 ]))));
   }
 
-  Widget _buildList() {
+  Widget _buildList(String id) {
     if (widget.fromJoin) {
-      Future<Test> test = service.getTest("-M5CrUk1fAR6aOW7L3SV");
+      Future<Test> test = service.getTest(id);
       return FutureBuilder(
         future: test,
         builder: (context, snapshot) {
