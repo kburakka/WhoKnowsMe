@@ -8,6 +8,9 @@ import 'package:my_app/core/service/firebase_service.dart';
 import 'package:my_app/extension/hex_color.dart';
 import 'package:my_app/ui/shared/card_view.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/ui/shared/warning_alert.dart';
+import 'package:my_app/ui/view/MyHomePage.dart';
+import 'package:share/share.dart';
 
 class TestView extends StatefulWidget {
   final bool fromJoin;
@@ -23,6 +26,7 @@ class _TestViewState extends State<TestView> {
   List<Question> questions;
   DateTime now;
   List<int> realAnswers;
+  TextEditingController nameController = new TextEditingController();
 
   @override
   void initState() {
@@ -34,7 +38,7 @@ class _TestViewState extends State<TestView> {
   @override
   Widget build(BuildContext context) {
     final String id = ModalRoute.of(context).settings.arguments;
-    
+
     return Scaffold(
         appBar: AppBar(
             backgroundColor: HexColor.fromHex('484693'),
@@ -50,9 +54,27 @@ class _TestViewState extends State<TestView> {
                       HexColor.fromHex('559596')
                     ])),
                 child: Column(children: [
-                  Expanded(child: _buildList(id)),
+                  Expanded(child: _buildList(id)),Padding(
+                        padding: const EdgeInsets.only(
+                          left: 30, top: 10, right: 30, bottom: 0),
+                        child: new TextField(
+                          controller: nameController,
+                          style: new TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            labelStyle: new TextStyle(color: Colors.white),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)),
+                            labelText: AppLocalizations.getString('name'),
+                          ),
+                          cursorColor: Colors.white,
+                        ))
+                        ,
                   Padding(
-                      padding: const EdgeInsets.only(left:0,top:10,right:0,bottom:30), child: _finalButon())
+                      padding: const EdgeInsets.only(
+                          left: 0, top: 10, right: 0, bottom: 30),
+                      child: _finalButon())
                 ]))));
   }
 
@@ -83,8 +105,8 @@ class _TestViewState extends State<TestView> {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
               if (snapshot.hasData) {
-                questions = (snapshot.data..shuffle()).take(5).toList();
-                return _listView((snapshot.data..shuffle()).take(5).toList());
+                questions = (snapshot.data..shuffle()).take(10).toList();
+                return _listView(questions);
               } else {
                 return notFoundWidget;
               }
@@ -97,30 +119,36 @@ class _TestViewState extends State<TestView> {
     }
   }
 
+  String id = "fail";
   Widget _finalButon() {
     if (widget.fromJoin) {
       return FlatButton.icon(
         color: Colors.white38,
         icon: Icon(Icons.send),
         label: Text(AppLocalizations.getString('send')),
-        onPressed: () async {
-          now = DateTime.now();
-          Result result = new Result();
-          result.date = DateFormat('yyyy-MM-dd HH:mm:ss. SSS').format(now);
-          result.fillerId = await SharedPref.getFirebaseKey();
-          result.testId = "-M5CrUk1fAR6aOW7L3SV";
-          int point = 0;
-          List<int> fillerAnswers = questions.map((f) => f.state).toList();
-          if (realAnswers.length == fillerAnswers.length) {
-            for (var i = 0; i < realAnswers.length; i++) {
-              if (realAnswers[i] == fillerAnswers[i]) {
-                point = point + 1;
+        onPressed: () async{
+          print(nameController.text);
+          if (questions.map((f) => f.state).contains(-1) || nameController.text == "") {
+            await _showTestDialog("fill");
+          } else {
+            now = DateTime.now();
+            Result result = new Result();
+            result.date = DateFormat('yyyy-MM-dd HH:mm:ss. SSS').format(now);
+            result.fillerId = await SharedPref.getFirebaseKey();
+            result.testId = id;
+            int point = 0;
+            List<int> fillerAnswers = questions.map((f) => f.state).toList();
+            if (realAnswers.length == fillerAnswers.length) {
+              for (var i = 0; i < realAnswers.length; i++) {
+                if (realAnswers[i] == fillerAnswers[i]) {
+                  point = point + 1;
+                }
               }
             }
+            result.score = point;
+            await service.postResult(result);
+            _neverSatisfied(point);
           }
-          result.score = point;
-          await service.postResult(result);
-          _neverSatisfied(point);
         },
       );
     } else {
@@ -129,47 +157,78 @@ class _TestViewState extends State<TestView> {
         icon: Icon(Icons.share),
         label: Text(AppLocalizations.getString('share')),
         onPressed: () async {
-          now = DateTime.now();
-          Test test = new Test();
-          test.date = DateFormat('yyyy-MM-dd HH:mmssSSS').format(now);
-          test.questions = questions;
-          test.owner = await SharedPref.getFirebaseKey();
-        
-          test.id = test.owner.substring(test.owner.length-1) + test.date.split(":")[1];
+          if (questions.map((f) => f.state).contains(-1) || nameController.text == "") {
+            await _showTestDialog("fill");
+          } else {
+            now = DateTime.now();
+            Test test = new Test();
+            test.date = DateFormat('yyyy-MM-dd HH:mmssSSS').format(now);
+            test.questions = questions;
+            test.owner = await SharedPref.getFirebaseKey();
+            test.name = nameController.text;
 
-          service.postTest(test);
+            test.id = test.owner.substring(test.owner.length - 1) +
+                test.date.split(":")[1];
+
+            id = await service.postTest(test);
+            await _showTestDialog(id);
+          }
         },
       );
     }
   }
 
   Future<void> _neverSatisfied(int point) async {
-  String text = AppLocalizations.getString('point') + "$point.";
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: false,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text(AppLocalizations.getString('congratulations')),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              Text(text),
+    String text = AppLocalizations.getString('point') + "$point.";
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return WarningAlert(
+            body: text,
+            title: AppLocalizations.getString('congratulations'),
+            route: MyHomePage());
+      },
+    );
+  }
+
+  Future<void> _showTestDialog(String type) async{
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        if (type == "fail") {
+          return WarningAlert(
+              body: "",
+              title: AppLocalizations.getString('error'));
+        } else if (type == "fill") {
+          return WarningAlert(
+              title: AppLocalizations.getString("warning"),
+              body: AppLocalizations.getString("fill"));
+        } else {
+          return AlertDialog(
+            title: Text('Tebrikler oyununuz kaydedildi. Oyun no : $id'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+                child: Text('Share'),
+                onPressed: () {
+                  Share.share('check out my website https://example.com');
+                  Navigator.of(context).pop();
+                },
+              ),
             ],
-          ),
-        ),
-        actions: <Widget>[
-          FlatButton(
-            child: Text(AppLocalizations.getString('ok')),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
+          );
+        }
+      },
+    );
+  }
 
   Widget _listViewForJoin(Test test) {
     questions = test.questions;
@@ -191,6 +250,6 @@ class _TestViewState extends State<TestView> {
             question: list[index],
           ));
 
-  Widget get notFoundWidget => Center(child: Text("NOT FOUND"));
+  Widget get notFoundWidget => WarningAlert(title:AppLocalizations.getString('not_found'),body: AppLocalizations.getString("not_found_body"),);
   Widget get waitingWidget => Center(child: CircularProgressIndicator());
 }

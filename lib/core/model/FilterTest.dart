@@ -7,7 +7,9 @@ class FilterTest extends BaseModel{
   FilterTest({this.test});
 
   FilterTest.fromJson(Map<String, dynamic> json) {
-    test = Test.fromJson(json[json.keys.first]);
+    if (json.keys.length > 0){
+      test = Test.fromJson(json[json.keys.first]);
+    }
   }
 
   @override

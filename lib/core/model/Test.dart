@@ -5,6 +5,8 @@ class Test extends BaseModel{
   String date;
   String owner;
   String id;
+  String name;
+
   List<Question> questions;
 
   Test({this.id,this.date, this.owner, this.questions});
@@ -12,6 +14,7 @@ class Test extends BaseModel{
   Test.fromJson(Map<String, dynamic> json) {
     date = json['date'];
     owner = json['owner'];
+    name = json['name'];
     id = json['id'];
     if (json['questions'] != null) {
       questions = new List<Question>();
@@ -25,6 +28,7 @@ class Test extends BaseModel{
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['date'] = this.date;
     data['owner'] = this.owner;
+    data['name'] = this.name;
     data['id'] = this.id;
     if (this.questions != null) {
       data['questions'] = this.questions.map((v) => v.toJson()).toList();

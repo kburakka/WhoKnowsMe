@@ -38,6 +38,20 @@ class FirebaseService {
     }
   }
 
+
+  Future<Test> getTestByKey(String key) async {
+    final response = await http.get("$FIREBASE_URL/tests/$key.json");
+    switch (response.statusCode) {
+      case HttpStatus.ok:
+        final jsonModel = json.decode(response.body) as Map;
+        if (jsonModel == null) throw NullThrownError();
+        return Test.fromJson(jsonModel);
+      default:
+        return Future.error(response.statusCode);
+    }
+  }
+
+
   Future<List<Question>> getQuestions() async {
     var response = await _baseService.get<Question>(Question(), "questions");
     if (response is List<Question>) {
@@ -76,7 +90,9 @@ class FirebaseService {
     }
   }
 
-  Future postTest(Test request) async {
+  Test sendedTest;
+
+  Future<String> postTest(Test request) async {
     var jsonModel = json.encode(request.toJson());
     final response =
         await http.post("$FIREBASE_URL/tests.json", body: jsonModel);
@@ -84,7 +100,11 @@ class FirebaseService {
     switch (response.statusCode) {
       case HttpStatus.ok:
         final jsonModel = json.decode(response.body);
-        return jsonModel["name"];
+        if (jsonModel["name"] == null){
+          return "fail";
+        }
+        sendedTest = await getTestByKey(jsonModel["name"]);
+        return sendedTest.id;
       default:
         return "fail";
     }

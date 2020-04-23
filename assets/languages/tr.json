@@ -8,7 +8,13 @@
     "id" : "Oyun No",
     "enter" : "GİRİŞ",
     "send":"GÖNDER",
-    "congratulations" : "Congratulations!",
+    "congratulations" : "Tebrikler!",
     "point" : "Aldığınız skor ",
-    "ok" : "TAMAM"
+    "ok" : "TAMAM",
+    "not_found" : "BULUNAMADI",
+    "error" : "Hata oluştu!",
+    "warning":"Uyarı!",
+    "fill":"Lütfen bütün soruları doldurun.",
+    "not_found_body":"Lütfen geçerli bir oyun numarası girin.",
+    "name":"AD"
 }

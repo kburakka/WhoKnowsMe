@@ -25,6 +25,8 @@ dependencies:
   shared_preferences: ^0.5.6
   flutter_bloc: ^3.1.0
   device_info: 0.4.2+1
+  fluttertoast: ^4.0.0
+  share: 0.6.4
 
 
 

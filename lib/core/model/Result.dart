@@ -5,6 +5,7 @@ class Result extends BaseModel{
   String fillerId;
   int score;
   String testId;
+  String name;
 
   Result({this.date, this.fillerId, this.score, this.testId});
 
@@ -13,6 +14,7 @@ class Result extends BaseModel{
     fillerId = json['fillerId'];
     score = json['score'];
     testId = json['testId'];
+    name = json['name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -21,6 +23,7 @@ class Result extends BaseModel{
     data['fillerId'] = this.fillerId;
     data['score'] = this.score;
     data['testId'] = this.testId;
+    data['name'] = this.name;
     return data;
   }
 

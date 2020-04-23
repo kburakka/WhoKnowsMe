@@ -10,5 +10,11 @@
     "send" : "SEND",
     "congratulations" : "Congratulations!",
     "point" : "Your score is ",
-    "ok" : "OK"
+    "ok" : "OK",
+    "not_found" : "NOT FOUND",
+    "error" : "An error occurred!",
+    "warning" : "Warning!",
+    "fill" : "Please fill out all the questions.",
+    "not_found_body":"Please enter a valid game number.",
+    "name":"NAME"
 }
