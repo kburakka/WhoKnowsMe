@@ -27,7 +27,7 @@ class _TestViewState extends State<TestView> {
   DateTime now;
   List<int> realAnswers;
   TextEditingController nameController = new TextEditingController();
-
+  String id = "fail";
   @override
   void initState() {
     super.initState();
@@ -37,8 +37,8 @@ class _TestViewState extends State<TestView> {
 
   @override
   Widget build(BuildContext context) {
-    final String id = ModalRoute.of(context).settings.arguments;
-
+    final String argument = ModalRoute.of(context).settings.arguments;
+    id = argument;
     return Scaffold(
         appBar: AppBar(
             backgroundColor: HexColor.fromHex('484693'),
@@ -119,7 +119,7 @@ class _TestViewState extends State<TestView> {
     }
   }
 
-  String id = "fail";
+  // String id = "fail";
   Widget _finalButon() {
     if (widget.fromJoin) {
       return FlatButton.icon(
@@ -127,7 +127,6 @@ class _TestViewState extends State<TestView> {
         icon: Icon(Icons.send),
         label: Text(AppLocalizations.getString('send')),
         onPressed: () async{
-          print(nameController.text);
           if (questions.map((f) => f.state).contains(-1) || nameController.text == "") {
             await _showTestDialog("fill");
           } else {
@@ -136,6 +135,7 @@ class _TestViewState extends State<TestView> {
             result.date = DateFormat('yyyy-MM-dd HH:mm:ss. SSS').format(now);
             result.fillerId = await SharedPref.getFirebaseKey();
             result.testId = id;
+            result.name = nameController.text;
             int point = 0;
             List<int> fillerAnswers = questions.map((f) => f.state).toList();
             if (realAnswers.length == fillerAnswers.length) {

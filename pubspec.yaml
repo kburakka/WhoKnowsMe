@@ -56,6 +56,7 @@ flutter:
    - assets/images/joinTest.png
    - assets/images/createTest.png
    - assets/images/flagTr.png
+   - assets/images/multiLanguage.png
    - assets/images/flagEng.png
    - assets/languages/en.json 
    - assets/languages/tr.json 
